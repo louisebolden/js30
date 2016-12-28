@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  background:#ffc600;
+  background: #00d0ff;
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 200;
@@ -42,7 +42,7 @@ input.search {
 .suggestions li {
   background:white;
   list-style: none;
-  border-bottom: 1px solid #D8D8D8;
+  border-bottom: 1px solid #00d0ff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.14);
   margin:0;
   padding:20px;
@@ -58,7 +58,7 @@ input.search {
   background: linear-gradient(to top,  #ffffff 0%,#EFEFEF 100%);
 }
 
-.keywords {
+.keywords, footer p {
   font-size: 15px;
 }
 
@@ -67,10 +67,11 @@ input.search {
 }
 
 .hl {
-  background:#ffc600;
+  background: #00d0ff;
+  color: white;
 }
 
-.love {
+footer p {
   text-align: center;
 }
 
