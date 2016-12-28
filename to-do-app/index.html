@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>A List of Nice Things</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+  
+    <div class="wrapper">
+      <h2>NICE THINGS</h2>
+      <p></p>
+      <ul class="things">
+        <li>Loading Nice Things...</li>
+      </ul>
+      <form class="add-items">
+        <input type="text" name="item" placeholder="Item Name" required>
+        <input type="submit" value="Add Nice Thing">
+      </form>
+    </div>
+    
+    <footer>
+      <p>Inspired & guided by <a href='https://javascript30.com/' target='_blank'>Wes Bos' #JavaScript30 challenge</a>.</p>
+      <p>Super-modern browsers only! 👌</p>
+    </footer>
+  
+    <script>
+      const addItemsForm = document.querySelector('.add-items');
+      const itemsList = document.querySelector('.things');
+      const things = JSON.parse(localStorage.getItem('things')) || [];
+      
+      addItemsForm.addEventListener('submit', addItem);
+      itemsList.addEventListener('click', clickHandler);
+      
+      populateList(things, itemsList);
+      
+      function addItem(event) {
+        event.preventDefault();
+        const text = (this.querySelector('[name=item]')).value;
+        const thing = {
+          text: text,
+          done: false
+        };
+        things.push(thing);
+        localStorage.setItem('things', JSON.stringify(things));
+        populateList(things, itemsList);
+        this.reset();
+      }
+      
+      function populateList(items = [], listEl) {
+        listEl.innerHTML = items.map((item, i) => {
+          return `
+            <li>
+              <input type='checkbox' data-index='${i}' id='item${i}' ${item.done ? 'checked' : ''}>
+              <label for='item${i}'>${item.text}</label>
+              <span class='delete-item' data-index='${i}'>❌</span>
+            </li>
+          `;
+        }).join('');
+      }
+      
+      function clickHandler(event) {
+        const el = event.target;
+        if (el.className == 'delete-item') {
+          things.splice(el.dataset.index, 1);
+        } else if (el.matches('input')) {
+          things[el.dataset.index].done = !things[el.dataset.index].done;
+        }
+        localStorage.setItem('things', JSON.stringify(things));
+        populateList(things, itemsList);
+      }
+      
+    </script>
+  
+  </body>
+</html>
