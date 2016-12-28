@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="./style2.css">
+  </head>
+  
+  <body>
+  
+    <form class="search-form">
+      <input type="text" class="search" placeholder="Emoji search">
+      <ul class="suggestions">
+        <li>Filter by emoji name</li>
+        <li>and/or keywords</li>
+      </ul>
+    </form>
+    
+    <footer>
+      <p>Inspired & guided by <a href='https://javascript30.com/'>Wes Bos' #JavaScript30 challenge</a>, exercise 6.</p>
+    </footer>
+    
+    <script>
+      const endpoint = 'https://raw.githubusercontent.com/Ranks/emojione/master/emoji.json';
+      const emojis = [];
+      const searchInput = document.querySelector('.search');
+      const suggestions = document.querySelector('.suggestions');
+      
+      searchInput.addEventListener('change', displayMatches);
+      searchInput.addEventListener('keyup', displayMatches);
+      
+      fetch(endpoint)
+        .then(blob => blob.json())
+        .then(data => { 
+          Object.keys(data).forEach(key => {
+            emojis.push(data[key]);
+          });
+          console.log('example emoji:', emojis[0]);
+        });
+      
+      function findMatches(wordToMatch, emojis) {
+        return emojis.filter(emoji => {
+          const regex = new RegExp(wordToMatch, 'gi');
+          return emoji.name.match(regex) || emoji.keywords.join('').match(regex);
+        });
+      }
+      
+      function displayMatches() {
+        const matchArray = findMatches(this.value, emojis);
+        const html = matchArray.map(emoji => {
+          const regex = new RegExp(this.value, 'gi');
+          const emojiName = emoji.name.replace(regex, `<span class="hl">${this.value}</span>`);
+          const emojiKeywords = emoji.keywords.join(', ').replace(regex, `<span class="hl">${this.value}</span>`);
+          return `<li>
+            <span class='emoji'>${emoji.code_decimal}</span>
+            ${emojiName}<br><span class='keywords'>${emojiKeywords}</span>
+          </li>`;
+        }).join('');
+        suggestions.innerHTML = html;
+      }
+    </script>
+  
+  </body>
+</html>
